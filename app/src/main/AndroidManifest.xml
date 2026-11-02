@@ -12,11 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cashatk">
 
-        <!-- Launcher activity set to LoginActivity so you can preview it immediately on your emulator -->
+        <!-- Splash Activity is the official LAUNCHER -->
         <activity
-            android:name=".LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,8 +23,9 @@
         </activity>
 
         <activity
-            android:name=".SplashActivity"
-            android:exported="false" />
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".OnboardingWelcomeActivity"
