@@ -8,6 +8,8 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="continue_btn">Continue</string>
+    <string name="error_first_name_required">Please enter your first name</string>
+    <string name="error_last_name_required">Please enter your last name</string>
 
     <!-- Home -->
     <string name="greeting_afternoon">Good afternoon,</string>
