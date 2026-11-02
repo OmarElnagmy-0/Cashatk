@@ -1,19 +1,42 @@
 package com.example.cashatk
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.cashatk.data.PreferenceHelper
 
 class LoginActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_MODE = "extra_mode"
+        const val MODE_LOGIN = "mode_login"             // Standard app lock/unlock
+        const val MODE_CREATE = "mode_create"           // Create new PIN
+        const val MODE_CHANGE_CURRENT = "mode_change"   // Verify current PIN before changing
+        const val MODE_DELETE_VERIFY = "mode_delete"    // Verify current PIN before deleting
+    }
+
     private val enteredPin = StringBuilder()
+    private var tempCreatedPin: String? = null
+    private var currentStep = 0 // 0 = initial entry, 1 = confirm entry (for MODE_CREATE)
     private val maxPinLength = 6
+
+    private lateinit var prefs: PreferenceHelper
     private lateinit var pinBoxes: List<TextView>
+    private lateinit var tvTitle: TextView
+    private lateinit var tvSubtitle: TextView
+    private lateinit var tvForgotPin: TextView
+    private lateinit var btnBack: ImageView
+
+    private var currentMode: String = MODE_LOGIN
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +49,21 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        prefs = PreferenceHelper(this)
+        currentMode = intent.getStringExtra(EXTRA_MODE) ?: MODE_LOGIN
+
+        initViews()
+        setupKeypad()
+        applyModeHeader()
+        updatePinUi()
+    }
+
+    private fun initViews() {
+        tvTitle = findViewById(R.id.tvLoginTitle)
+        tvSubtitle = findViewById(R.id.tvLoginSubtitle)
+        tvForgotPin = findViewById(R.id.tvForgotPin)
+        btnBack = findViewById(R.id.btnLoginBack)
+
         pinBoxes = listOf(
             findViewById(R.id.tvPin1),
             findViewById(R.id.tvPin2),
@@ -35,8 +73,44 @@ class LoginActivity : AppCompatActivity() {
             findViewById(R.id.tvPin6)
         )
 
-        setupKeypad()
-        updatePinUi()
+        // Show back button only when invoked as a task/settings sub-screen
+        if (currentMode != MODE_LOGIN) {
+            btnBack.visibility = View.VISIBLE
+            btnBack.setOnClickListener { finish() }
+            tvForgotPin.visibility = View.GONE
+        } else {
+            btnBack.visibility = View.GONE
+            tvForgotPin.visibility = View.VISIBLE
+            tvForgotPin.setOnClickListener {
+                Toast.makeText(this, "Reset PIN via Login & Security in Profile", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun applyModeHeader() {
+        when (currentMode) {
+            MODE_LOGIN -> {
+                tvTitle.setText(R.string.login_title)
+                tvSubtitle.setText(R.string.login_subtitle)
+            }
+            MODE_CREATE -> {
+                if (currentStep == 0) {
+                    tvTitle.setText(R.string.create_pin_title)
+                    tvSubtitle.setText(R.string.create_pin_subtitle)
+                } else {
+                    tvTitle.setText(R.string.confirm_pin_title)
+                    tvSubtitle.setText(R.string.confirm_pin_subtitle)
+                }
+            }
+            MODE_CHANGE_CURRENT -> {
+                tvTitle.setText(R.string.change_pin_title)
+                tvSubtitle.setText(R.string.change_pin_subtitle)
+            }
+            MODE_DELETE_VERIFY -> {
+                tvTitle.setText(R.string.verify_pin_title)
+                tvSubtitle.setText(R.string.verify_pin_subtitle)
+            }
+        }
     }
 
     private fun setupKeypad() {
@@ -61,10 +135,6 @@ class LoginActivity : AppCompatActivity() {
 
         findViewById<FrameLayout>(R.id.btnKeyBackspace)?.setOnClickListener {
             onBackspacePressed()
-        }
-
-        findViewById<TextView>(R.id.tvForgotPin)?.setOnClickListener {
-            Toast.makeText(this, "Reset PIN via Security settings", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -97,8 +167,79 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun clearPinInput() {
+        enteredPin.clear()
+        updatePinUi()
+    }
+
     private fun onPinComplete(pin: String) {
-        // Ready for validation against PreferenceHelper or AppDatabase
-        Toast.makeText(this, "PIN Entered: $pin", Toast.LENGTH_SHORT).show()
+        when (currentMode) {
+            MODE_LOGIN -> handleLoginPin(pin)
+            MODE_CREATE -> handleCreatePin(pin)
+            MODE_CHANGE_CURRENT -> handleChangeVerifyPin(pin)
+            MODE_DELETE_VERIFY -> handleDeleteVerifyPin(pin)
+        }
+    }
+
+    private fun handleLoginPin(pin: String) {
+        val savedPin = prefs.getPinCode()
+        if (savedPin == null || savedPin == pin) {
+            prefs.setLoggedIn(true)
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        } else {
+            Toast.makeText(this, getString(R.string.pin_incorrect), Toast.LENGTH_SHORT).show()
+            clearPinInput()
+        }
+    }
+
+    private fun handleCreatePin(pin: String) {
+        if (currentStep == 0) {
+            tempCreatedPin = pin
+            currentStep = 1
+            clearPinInput()
+            applyModeHeader()
+        } else {
+            if (tempCreatedPin == pin) {
+                prefs.savePinCode(pin)
+                Toast.makeText(this, getString(R.string.pin_saved_success), Toast.LENGTH_SHORT).show()
+                setResult(Activity.RESULT_OK)
+                finish()
+            } else {
+                Toast.makeText(this, getString(R.string.pin_mismatch), Toast.LENGTH_SHORT).show()
+                currentStep = 0
+                tempCreatedPin = null
+                clearPinInput()
+                applyModeHeader()
+            }
+        }
+    }
+
+    private fun handleChangeVerifyPin(pin: String) {
+        val savedPin = prefs.getPinCode()
+        if (savedPin == pin) {
+            // Current PIN verified, switch to create flow for new PIN
+            currentMode = MODE_CREATE
+            currentStep = 0
+            tempCreatedPin = null
+            clearPinInput()
+            applyModeHeader()
+        } else {
+            Toast.makeText(this, getString(R.string.pin_incorrect), Toast.LENGTH_SHORT).show()
+            clearPinInput()
+        }
+    }
+
+    private fun handleDeleteVerifyPin(pin: String) {
+        val savedPin = prefs.getPinCode()
+        if (savedPin == pin) {
+            prefs.savePinCode("") // Clears PIN
+            Toast.makeText(this, getString(R.string.pin_removed_success), Toast.LENGTH_SHORT).show()
+            setResult(Activity.RESULT_OK)
+            finish()
+        } else {
+            Toast.makeText(this, getString(R.string.pin_incorrect), Toast.LENGTH_SHORT).show()
+            clearPinInput()
+        }
     }
 }

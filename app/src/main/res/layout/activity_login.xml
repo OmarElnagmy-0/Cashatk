@@ -31,6 +31,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Optional Back Button (Visible when invoked from Profile / Security settings) -->
+    <ImageView
+        android:id="@+id/btnLoginBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/profile_title"
+        android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_arrow_back"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/teal_primary"
+        tools:visibility="visible" />
+
     <!-- Top Lock Icon Badge -->
     <ImageView
         android:id="@+id/ivLockIcon"
@@ -43,7 +62,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Title: Welcome Back -->
+    <!-- Dynamic Title (e.g. Welcome Back / Create 6-Digit PIN) -->
     <TextView
         android:id="@+id/tvLoginTitle"
         android:layout_width="wrap_content"
@@ -57,7 +76,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivLockIcon" />
 
-    <!-- Subtitle: Enter 6-digit PIN -->
+    <!-- Dynamic Subtitle -->
     <TextView
         android:id="@+id/tvLoginSubtitle"
         android:layout_width="0dp"
@@ -159,7 +178,7 @@
             tools:text="•" />
     </LinearLayout>
 
-    <!-- Forgot PIN / Info text -->
+    <!-- Forgot PIN / Info text (Shown during App Unlock) -->
     <TextView
         android:id="@+id/tvForgotPin"
         android:layout_width="wrap_content"
@@ -181,7 +200,7 @@
         android:id="@+id/numericKeypad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="36dp"
         android:alignmentMode="alignMargins"
         android:columnCount="3"
         android:rowCount="4"
@@ -329,7 +348,7 @@
             android:textSize="26sp"
             android:textStyle="bold" />
 
-        <!-- Row 4: Empty/Biometric, 0, Backspace -->
+        <!-- Row 4: Empty, 0, Backspace -->
         <View
             android:layout_width="74dp"
             android:layout_height="74dp"
