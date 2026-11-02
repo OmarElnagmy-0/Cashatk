@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
