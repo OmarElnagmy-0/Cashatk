@@ -36,11 +36,20 @@
     <string name="delete_category">Delete Category</string>
     <string name="category_name_hint">Category Name</string>
 
-    <!-- Login & Security (6-digit PIN) -->
+    <!-- Login & PIN -->
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Enter your 6-digit PIN code to access Cashatk</string>
+    <string name="forgot_pin">Forgot PIN?</string>
+
+    <!-- Security & PIN Management -->
     <string name="set_pin_title">Set 6-Digit PIN</string>
     <string name="enter_pin_hint">Enter 6-digit PIN</string>
     <string name="save_pin_btn">Save PIN</string>
 
     <!-- Data & Privacy -->
+    <string name="data_privacy_title">Data &amp; Privacy</string>
+    <string name="data_privacy_badge">100% Local &amp; Private</string>
+    <string name="data_privacy_heading">Your Financial Privacy First</string>
     <string name="data_privacy_description">All your financial data, categories, and profile preferences are stored locally on your device. Cashatk does not upload or share your personal information with any external server.</string>
+    <string name="data_privacy_footer_note">Your data is stored exclusively in your device\'s SQLite database and secure SharedPreferences. No analytics, tracking, or cloud synchronizations are enabled.</string>
 </resources>
