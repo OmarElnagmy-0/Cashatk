@@ -9,7 +9,7 @@
 3. **Onboarding (User Name)** – Prompts the user for their First Name and Last Name for local personalization.
 4. **Home** – Greets the user, displays Total Expenses, and lists recent Transactions History.
 5. **Add Expense** – Allows logging a new expense by selecting a category, adding a description, entering an amount, and picking a date.
-6. **Profile** – Lets the user upload a profile picture and access **Categories** (add, edit, and delete categories), **Login and Security** (6-digit local PIN), and **Data & Privacy** (local storage information).
+6. **Profile** – Lets the user upload a profile picture and access **Categories** (add, edit, and delete categories), **Login and Security** (enable or disable App Lock using the phone's fingerprint, face unlock, or screen lock), and **Data & Privacy** (local storage information).
 
 ## Phase 2 Screens
 
