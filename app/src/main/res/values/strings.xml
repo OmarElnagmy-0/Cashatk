@@ -12,10 +12,21 @@
     <string name="error_last_name_required">Please enter your last name</string>
 
     <!-- Home -->
+    <string name="greeting_hello">Hello ,</string>
     <string name="greeting_afternoon">Good afternoon,</string>
     <string name="total_expenses">Total Expenses</string>
     <string name="transactions_history">Transactions History</string>
     <string name="see_all">See all</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_wallet">Wallet</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_transaction_icon">Transaction Icon</string>
+    <string name="cd_add_transaction">Add transaction</string>
 
     <!-- Add Expense -->
     <string name="add_expense_title">Add Expense</string>
