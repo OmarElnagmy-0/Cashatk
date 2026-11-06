@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutIconOption"
+    android:layout_width="54dp"
+    android:layout_height="54dp"
+    android:layout_margin="4dp"
+    android:background="@drawable/bg_icon_selector_item"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/ivIconOption"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_gravity="center"
+        android:contentDescription="@string/category_label"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_cat_general" />
+</FrameLayout>
