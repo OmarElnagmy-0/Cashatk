@@ -42,23 +42,11 @@ class PreferenceHelper(context: Context) {
         sharedPref.edit { remove("profile_image_uri") }
     }
 
-    fun setLoggedIn(isLoggedIn: Boolean) {
-        sharedPref.edit { putBoolean("is_logged_in", isLoggedIn) }
+    fun setAppLockEnabled(enabled: Boolean) {
+        sharedPref.edit { putBoolean("is_app_lock_enabled", enabled) }
     }
 
-    fun isLoggedIn(): Boolean {
-        return sharedPref.getBoolean("is_logged_in", false)
-    }
-
-    fun savePinCode(pin: String) {
-        sharedPref.edit { putString("pin_code", pin) }
-    }
-
-    fun getPinCode(): String? {
-        return sharedPref.getString("pin_code", null)
-    }
-
-    fun hasPinCode(): Boolean {
-        return !getPinCode().isNullOrEmpty()
+    fun isAppLockEnabled(): Boolean {
+        return sharedPref.getBoolean("is_app_lock_enabled", false)
     }
 }

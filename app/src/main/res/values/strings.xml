@@ -47,7 +47,7 @@
     <string name="change_profile_photo">Change photo</string>
     <string name="profile_settings">Settings</string>
     <string name="categories_description">Organize your expense categories</string>
-    <string name="login_security_description">Manage your PIN protection</string>
+    <string name="login_security_description">Manage your app lock protection</string>
     <string name="data_privacy_description_short">Learn how your data is stored</string>
     <string name="cd_profile_photo">Profile photo</string>
     <string name="cd_categories">Categories</string>
@@ -63,39 +63,17 @@
     <string name="delete_category">Delete Category</string>
     <string name="category_name_hint">Category Name</string>
 
-    <!-- Dynamic PIN Screen Titles & Subtitles -->
-    <string name="login_title">Welcome Back</string>
-    <string name="login_subtitle">Enter your 6-digit PIN code to access Cashatk</string>
-    <string name="create_pin_title">Create 6-Digit PIN</string>
-    <string name="create_pin_subtitle">Set a secure PIN code to protect your transactions and privacy</string>
-    <string name="confirm_pin_title">Confirm Your PIN</string>
-    <string name="confirm_pin_subtitle">Please re-enter your 6-digit PIN to confirm</string>
-    <string name="change_pin_title">Change PIN</string>
-    <string name="change_pin_subtitle">Enter your current PIN code first</string>
-    <string name="new_pin_title">Enter New PIN</string>
-    <string name="new_pin_subtitle">Choose your new 6-digit PIN code</string>
-    <string name="verify_pin_title">Verify PIN</string>
-    <string name="verify_pin_subtitle">Enter your 6-digit PIN to confirm deletion</string>
-    <string name="forgot_pin">Forgot PIN?</string>
-
-    <!-- Login & Security Menu -->
+    <!-- Login & Security (Biometric / Device Lock) -->
     <string name="security_overview_title">App Security</string>
-    <string name="security_overview_desc">Protect your financial records with an extra security layer.</string>
-    <string name="security_status_enabled">PIN Protection Enabled</string>
-    <string name="security_status_disabled">PIN Protection Disabled</string>
-    <string name="create_pin_action_title">Create PIN Code</string>
-    <string name="create_pin_action_desc">Add an extra layer of security when opening Cashatk</string>
-    <string name="change_pin_action_title">Change PIN Code</string>
-    <string name="change_pin_action_desc">Update your existing 6-digit PIN</string>
-    <string name="delete_pin_action_title">Remove PIN Protection</string>
-    <string name="delete_pin_action_desc">Turn off PIN security (not recommended)</string>
-
-    <!-- PIN Feedback Messages -->
-    <string name="pin_saved_success">PIN created successfully!</string>
-    <string name="pin_changed_success">PIN changed successfully!</string>
-    <string name="pin_removed_success">PIN protection removed.</string>
-    <string name="pin_mismatch">PINs do not match. Please try again.</string>
-    <string name="pin_incorrect">Incorrect PIN. Please try again.</string>
+    <string name="security_overview_desc">Protect your financial records using your phone\'s fingerprint, face unlock, or screen lock.</string>
+    <string name="security_status_enabled">App Lock Enabled</string>
+    <string name="security_status_disabled">App Lock Disabled</string>
+    <string name="app_lock_switch_title">App Lock</string>
+    <string name="app_lock_switch_desc">Require device authentication when opening Cashatk</string>
+    <string name="app_lock_prompt_title">Unlock Cashatk</string>
+    <string name="app_lock_prompt_subtitle">Confirm your fingerprint or device lock to continue</string>
+    <string name="app_lock_not_available">Please set up a screen lock or fingerprint in your phone Settings first.</string>
+    <string name="app_lock_auth_failed">Authentication failed. Please try again.</string>
 
     <!-- Data & Privacy -->
     <string name="data_privacy_title">Data &amp; Privacy</string>
@@ -104,7 +82,7 @@
     <string name="data_privacy_description">All your financial data, categories, and profile preferences are stored locally on your device. Cashatk does not upload or share your personal information with any external server.</string>
     <string name="data_privacy_bullet_1_title">Offline By Design</string>
     <string name="data_privacy_bullet_1_desc">No cloud servers, no account registration required. Your wallet works anywhere, anytime.</string>
-    <string name="data_privacy_bullet_2_title">Local Encrypted &amp; Secure Storage</string>
+    <string name="data_privacy_bullet_2_title">Local &amp; Private Storage</string>
     <string name="data_privacy_bullet_2_desc">Transactions are stored in a private SQLite Room database accessible only by this application.</string>
     <string name="data_privacy_bullet_3_title">Zero Analytics &amp; Tracking</string>
     <string name="data_privacy_bullet_3_desc">We do not track your expenses, habits, or personal information. Your money is your business.</string>
