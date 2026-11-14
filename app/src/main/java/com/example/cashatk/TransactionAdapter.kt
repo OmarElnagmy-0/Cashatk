@@ -9,41 +9,51 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cashatk.data.TransactionWithCategory
+import com.example.cashatk.data.Category
+import com.example.cashatk.data.Transaction
 import java.text.NumberFormat
 import java.util.Locale
 
 class TransactionAdapter :
-    ListAdapter<TransactionWithCategory, TransactionAdapter.TransactionViewHolder>(DiffCallback) {
+    ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(DiffCallback) {
 
-    class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private var categoryMap: Map<Int, Category> = emptyMap()
+
+    fun submitData(transactions: List<Transaction>, categories: List<Category>) {
+        categoryMap = categories.associateBy { it.id }
+        submitList(transactions)
+    }
+
+    inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle: TextView = itemView.findViewById(R.id.tv_title)
         private val tvDate: TextView = itemView.findViewById(R.id.tv_date)
         private val tvAmount: TextView = itemView.findViewById(R.id.tv_amount)
         private val ivIcon: ImageView = itemView.findViewById(R.id.iv_icon)
 
-        fun bind(item: TransactionWithCategory) {
-            tvTitle.text = item.transaction.description ?: item.category.name
+        fun bind(item: Transaction) {
+            val category = categoryMap[item.categoryId]
+            tvTitle.text = item.description?.takeIf { it.isNotBlank() } ?: category?.name ?: "Expense"
 
-            val isRecent = DateUtils.isToday(item.transaction.date)
+            val isRecent = DateUtils.isToday(item.date)
             tvDate.text = if (isRecent) {
                 "Today"
-            } else if (DateUtils.isToday(item.transaction.date + DateUtils.DAY_IN_MILLIS)) {
+            } else if (DateUtils.isToday(item.date + DateUtils.DAY_IN_MILLIS)) {
                 "Yesterday"
             } else {
                 DateUtils.formatDateTime(
                     itemView.context,
-                    item.transaction.date,
+                    item.date,
                     DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_ABBREV_MONTH
                 )
             }
 
             val format = NumberFormat.getCurrencyInstance(Locale.US)
-            val formattedAmount = format.format(item.transaction.amount)
+            val formattedAmount = format.format(item.amount)
             tvAmount.text = itemView.context.getString(R.string.expense_amount_format, formattedAmount)
 
-            // Set icon placeholder logic or load real icon
-            // ivIcon.setImageResource(...)
+            ivIcon.setImageResource(
+                CategoryIconHelper.getDrawableRes(itemView.context, category?.icon)
+            )
         }
     }
 
@@ -58,18 +68,12 @@ class TransactionAdapter :
     }
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<TransactionWithCategory>() {
-            override fun areItemsTheSame(
-                oldItem: TransactionWithCategory,
-                newItem: TransactionWithCategory
-            ): Boolean {
-                return oldItem.transaction.id == newItem.transaction.id
+        private val DiffCallback = object : DiffUtil.ItemCallback<Transaction>() {
+            override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
+                return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(
-                oldItem: TransactionWithCategory,
-                newItem: TransactionWithCategory
-            ): Boolean {
+            override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
                 return oldItem == newItem
             }
         }

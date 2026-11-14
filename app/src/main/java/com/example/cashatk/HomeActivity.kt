@@ -40,6 +40,10 @@ class HomeActivity : AppCompatActivity() {
         setupGreeting()
         setupRecyclerView()
         setupBottomNavigation()
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadData()
     }
 
@@ -80,10 +84,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun loadData() {
         lifecycleScope.launch {
-            val transactions = db.transactionDao().getAllTransactionsWithCategory()
-            adapter.submitList(transactions)
+            val transactions = db.transactionDao().getAllTransactions()
+            val categories = db.categoryDao().getAllCategories()
+            adapter.submitData(transactions, categories)
 
-            val totalExpenses = transactions.sumOf { it.transaction.amount }
+            val totalExpenses = transactions.sumOf { it.amount }
 
             val format = NumberFormat.getNumberInstance(Locale.US).apply {
                 minimumFractionDigits = 2

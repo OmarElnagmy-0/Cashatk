@@ -16,9 +16,7 @@ import com.example.cashatk.data.AppDatabase
 import com.example.cashatk.data.Category
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CategoriesActivity : AppCompatActivity() {
 
@@ -74,11 +72,6 @@ class CategoriesActivity : AppCompatActivity() {
 
     private fun loadCategories() {
         lifecycleScope.launch {
-            // Ensure default predefined categories exist in the database
-            withContext(Dispatchers.IO) {
-                DatabasePrepopulateCallback.prepopulateCategories(this@CategoriesActivity)
-            }
-
             categoryList = db.categoryDao().getAllCategories()
             adapter.submitList(categoryList)
 
