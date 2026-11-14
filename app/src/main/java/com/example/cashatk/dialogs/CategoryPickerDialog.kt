@@ -1,10 +1,12 @@
-package com.example.cashatk
+package com.example.cashatk.dialogs
 
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cashatk.R
+import com.example.cashatk.adapters.CategoryPickerAdapter
 import com.example.cashatk.data.Category
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

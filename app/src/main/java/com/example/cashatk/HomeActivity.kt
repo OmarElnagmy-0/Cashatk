@@ -3,6 +3,7 @@ package com.example.cashatk
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cashatk.adapters.TransactionAdapter
 import com.example.cashatk.data.AppDatabase
 import com.example.cashatk.data.PreferenceHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -59,6 +61,10 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_home -> true
+                R.id.nav_stats, R.id.nav_wallet -> {
+                    Toast.makeText(this, "Coming in Phase 2", Toast.LENGTH_SHORT).show()
+                    false
+                }
                 else -> false
             }
         }

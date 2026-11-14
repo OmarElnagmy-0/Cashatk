@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -114,6 +115,10 @@ class ProfileActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> true
+                R.id.nav_stats, R.id.nav_wallet -> {
+                    Toast.makeText(this, "Coming in Phase 2", Toast.LENGTH_SHORT).show()
+                    false
+                }
                 else -> false
             }
         }

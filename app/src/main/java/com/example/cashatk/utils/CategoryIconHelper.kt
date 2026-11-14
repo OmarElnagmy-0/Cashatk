@@ -1,14 +1,15 @@
-package com.example.cashatk
+package com.example.cashatk.utils
 
 import android.content.Context
 import androidx.annotation.DrawableRes
-
-data class CategoryIconItem(
-    val iconName: String,
-    val defaultTitle: String
-)
+import com.example.cashatk.R
 
 object CategoryIconHelper {
+
+    data class CategoryIconItem(
+        val iconName: String,
+        val defaultTitle: String
+    )
 
     val PREDEFINED_CATEGORIES = listOf(
         CategoryIconItem("ic_cat_food", "Food & Dining"),

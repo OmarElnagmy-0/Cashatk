@@ -1,4 +1,4 @@
-package com.example.cashatk
+package com.example.cashatk.adapters
 
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -9,8 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cashatk.R
 import com.example.cashatk.data.Category
 import com.example.cashatk.data.Transaction
+import com.example.cashatk.utils.CategoryIconHelper
 import java.text.NumberFormat
 import java.util.Locale
 

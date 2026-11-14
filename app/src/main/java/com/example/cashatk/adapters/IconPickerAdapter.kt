@@ -1,10 +1,12 @@
-package com.example.cashatk
+package com.example.cashatk.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cashatk.R
+import com.example.cashatk.utils.CategoryIconHelper
 
 class IconPickerAdapter(
     private val icons: List<String>,

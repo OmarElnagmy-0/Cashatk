@@ -1,4 +1,4 @@
-package com.example.cashatk
+package com.example.cashatk.dialogs
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,7 +6,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cashatk.R
+import com.example.cashatk.adapters.IconPickerAdapter
 import com.example.cashatk.data.Category
+import com.example.cashatk.utils.CategoryIconHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -55,7 +58,6 @@ class CategoryCrudDialog(
             selectedIcon = selectedIcon
         ) { chosenIcon ->
             selectedIcon = chosenIcon
-            // When adding a new category, suggest the default name if the user hasn't typed custom text yet
             if (categoryToEdit == null && !userManuallyEditedName) {
                 etName.setText(CategoryIconHelper.getDefaultTitleForIcon(chosenIcon))
             }

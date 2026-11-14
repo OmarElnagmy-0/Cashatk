@@ -1,4 +1,4 @@
-package com.example.cashatk
+package com.example.cashatk.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cashatk.R
 import com.example.cashatk.data.Category
+import com.example.cashatk.utils.CategoryIconHelper
 
 class CategoryPickerAdapter(
     private val onCategorySelected: (Category) -> Unit

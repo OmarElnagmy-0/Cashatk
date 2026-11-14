@@ -12,8 +12,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cashatk.adapters.CategoryAdapter
 import com.example.cashatk.data.AppDatabase
 import com.example.cashatk.data.Category
+import com.example.cashatk.dialogs.CategoryCrudDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import kotlinx.coroutines.launch
