@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
@@ -14,6 +15,12 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.cashatk.data.PreferenceHelper
 
 class SplashActivity : AppCompatActivity() {
+
+    private lateinit var prefs: PreferenceHelper
+
+    private val authenticators =
+        BiometricManager.Authenticators.BIOMETRIC_STRONG or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,47 +33,55 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
 
+        prefs = PreferenceHelper(this)
+
         Handler(Looper.getMainLooper()).postDelayed({
             routeUser()
         }, 1200)
     }
 
     private fun routeUser() {
-        val prefs = PreferenceHelper(this)
+        if (!prefs.isOnboardingCompleted()) {
+            startActivity(Intent(this, OnboardingWelcomeActivity::class.java))
+            finish()
+            return
+        }
 
-        when {
-            !prefs.isOnboardingCompleted() -> {
-                startActivity(Intent(this, OnboardingWelcomeActivity::class.java))
-                finish()
-            }
-            prefs.isAppLockEnabled() -> {
-                showAppLockPrompt()
-            }
-            else -> {
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
-            }
+        if (prefs.isAppLockEnabled()) {
+            authenticateUser()
+        } else {
+            openHome()
         }
     }
 
-    private fun showAppLockPrompt() {
-        val authenticators =
-            BiometricManager.Authenticators.BIOMETRIC_STRONG or
-                BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    private fun authenticateUser() {
+        if (BiometricManager.from(this).canAuthenticate(authenticators) != BiometricManager.BIOMETRIC_SUCCESS) {
+            Toast.makeText(this, R.string.app_lock_not_available, Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
-        val executor = ContextCompat.getMainExecutor(this)
         val prompt = BiometricPrompt(
             this,
-            executor,
+            ContextCompat.getMainExecutor(this),
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
-                    finish()
+                    openHome()
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    Toast.makeText(
+                        this@SplashActivity,
+                        R.string.app_lock_auth_failed,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
+                    Toast.makeText(this@SplashActivity, errString, Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -79,5 +94,10 @@ class SplashActivity : AppCompatActivity() {
             .build()
 
         prompt.authenticate(promptInfo)
+    }
+
+    private fun openHome() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
     }
 }

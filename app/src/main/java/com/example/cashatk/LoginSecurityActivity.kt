@@ -1,122 +1,116 @@
-// package com.example.cashatk
+package com.example.cashatk
 
-// import android.app.Activity
-// import android.content.Intent
-// import android.os.Bundle
-// import android.view.View
-// import android.widget.ImageView
-// import android.widget.LinearLayout
-// import android.widget.TextView
-// import androidx.activity.enableEdgeToEdge
-// import androidx.activity.result.contract.ActivityResultContracts
-// import androidx.appcompat.app.AppCompatActivity
-// import androidx.core.content.ContextCompat
-// import androidx.core.view.ViewCompat
-// import androidx.core.view.WindowInsetsCompat
-// import com.example.cashatk.data.PreferenceHelper
+import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.cashatk.data.PreferenceHelper
+import com.google.android.material.materialswitch.MaterialSwitch
 
-// class LoginSecurityActivity : AppCompatActivity() {
+class LoginSecurityActivity : AppCompatActivity() {
 
-//     private lateinit var prefs: PreferenceHelper
+    private lateinit var prefs: PreferenceHelper
+    private lateinit var tvSecurityStatus: TextView
+    private lateinit var ivSecurityIcon: ImageView
+    private lateinit var switchAppLock: MaterialSwitch
 
-//     private lateinit var tvSecurityStatus: TextView
-//     private lateinit var tvSecurityDesc: TextView
-//     private lateinit var ivSecurityIcon: ImageView
+    private val authenticators =
+        BiometricManager.Authenticators.BIOMETRIC_STRONG or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
 
-//     private lateinit var cardCreatePin: LinearLayout
-//     private lateinit var cardChangePin: LinearLayout
-//     private lateinit var cardDeletePin: LinearLayout
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_login_security)
 
-//     private val pinLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//         if (result.resultCode == Activity.RESULT_OK) {
-//             refreshSecurityUi()
-//         }
-//     }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
-//     override fun onCreate(savedInstanceState: Bundle?) {
-//         super.onCreate(savedInstanceState)
-//         enableEdgeToEdge()
-//         setContentView(R.layout.activity_login_security)
+        prefs = PreferenceHelper(this)
+        tvSecurityStatus = findViewById(R.id.tvSecurityStatus)
+        ivSecurityIcon = findViewById(R.id.ivSecurityIcon)
+        switchAppLock = findViewById(R.id.switchAppLock)
 
-//         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//             insets
-//         }
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener { finish() }
 
-//         prefs = PreferenceHelper(this)
+        refreshSecurityUi()
 
-//         initViews()
-//         setupListeners()
-//         refreshSecurityUi()
-//     }
+        switchAppLock.setOnClickListener {
+            val targetEnabled = switchAppLock.isChecked
+            switchAppLock.isChecked = !targetEnabled
 
-//     override fun onResume() {
-//         super.onResume()
-//         refreshSecurityUi()
-//     }
+            if (targetEnabled && !canAuthenticate()) {
+                Toast.makeText(this, getString(R.string.app_lock_not_available), Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
 
-//     private fun initViews() {
-//         tvSecurityStatus = findViewById(R.id.tvSecurityStatus)
-//         tvSecurityDesc = findViewById(R.id.tvSecurityDescription)
-//         ivSecurityIcon = findViewById(R.id.ivSecurityIcon)
+            authenticateUser(
+                onSuccess = {
+                    prefs.setAppLockEnabled(targetEnabled)
+                    refreshSecurityUi()
+                }
+            )
+        }
+    }
 
-//         cardCreatePin = findViewById(R.id.cardCreatePin)
-//         cardChangePin = findViewById(R.id.cardChangePin)
-//         cardDeletePin = findViewById(R.id.cardDeletePin)
+    private fun canAuthenticate(): Boolean {
+        val biometricManager = BiometricManager.from(this)
+        return biometricManager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
+    }
 
-//         findViewById<ImageView>(R.id.btnBack).setOnClickListener {
-//             finish()
-//         }
-//     }
+    private fun authenticateUser(onSuccess: () -> Unit) {
+        val executor = ContextCompat.getMainExecutor(this)
+        val prompt = BiometricPrompt(
+            this,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    onSuccess()
+                }
 
-//     private fun setupListeners() {
-//         // Choice 1: Create PIN (When user doesn't have a PIN)
-//         cardCreatePin.setOnClickListener {
-//             val intent = Intent(this, LoginActivity::class.java).apply {
-//                 putExtra(LoginActivity.EXTRA_MODE, LoginActivity.MODE_CREATE)
-//             }
-//             pinLauncher.launch(intent)
-//         }
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    Toast.makeText(
+                        this@LoginSecurityActivity,
+                        getString(R.string.app_lock_auth_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        )
 
-//         // Choice 2: Change existing PIN (When user has a PIN)
-//         cardChangePin.setOnClickListener {
-//             val intent = Intent(this, LoginActivity::class.java).apply {
-//                 putExtra(LoginActivity.EXTRA_MODE, LoginActivity.MODE_CHANGE_CURRENT)
-//             }
-//             pinLauncher.launch(intent)
-//         }
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(R.string.app_lock_prompt_title))
+            .setSubtitle(getString(R.string.app_lock_prompt_subtitle))
+            .setAllowedAuthenticators(authenticators)
+            .build()
 
-//         // Choice 3: Delete / Remove PIN (When user has a PIN)
-//         cardDeletePin.setOnClickListener {
-//             val intent = Intent(this, LoginActivity::class.java).apply {
-//                 putExtra(LoginActivity.EXTRA_MODE, LoginActivity.MODE_DELETE_VERIFY)
-//             }
-//             pinLauncher.launch(intent)
-//         }
-//     }
+        prompt.authenticate(promptInfo)
+    }
 
-//     private fun refreshSecurityUi() {
-//         val hasPin = prefs.hasPinCode()
+    private fun refreshSecurityUi() {
+        val enabled = prefs.isAppLockEnabled()
+        switchAppLock.isChecked = enabled
 
-//         if (hasPin) {
-//             // PIN is active: Hide create card, show change & delete options
-//             tvSecurityStatus.setText(R.string.security_status_enabled)
-//             tvSecurityStatus.setTextColor(ContextCompat.getColor(this, R.color.teal_primary))
-//             ivSecurityIcon.setColorFilter(ContextCompat.getColor(this, R.color.teal_primary))
-
-//             cardCreatePin.visibility = View.GONE
-//             cardChangePin.visibility = View.VISIBLE
-//             cardDeletePin.visibility = View.VISIBLE
-//         } else {
-//             // No PIN: Show create card, hide change & delete options
-//             tvSecurityStatus.setText(R.string.security_status_disabled)
-//             tvSecurityStatus.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-//             ivSecurityIcon.setColorFilter(ContextCompat.getColor(this, R.color.nav_inactive))
-
-//             cardCreatePin.visibility = View.VISIBLE
-//             cardChangePin.visibility = View.GONE
-//             cardDeletePin.visibility = View.GONE
-//         }
-//     }
-// }
+        if (enabled) {
+            tvSecurityStatus.setText(R.string.security_status_enabled)
+            tvSecurityStatus.setTextColor(ContextCompat.getColor(this, R.color.teal_primary))
+            ivSecurityIcon.setColorFilter(ContextCompat.getColor(this, R.color.teal_primary))
+        } else {
+            tvSecurityStatus.setText(R.string.security_status_disabled)
+            tvSecurityStatus.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+            ivSecurityIcon.setColorFilter(ContextCompat.getColor(this, R.color.nav_inactive))
+        }
+    }
+}
