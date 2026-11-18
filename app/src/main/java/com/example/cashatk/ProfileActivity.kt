@@ -116,7 +116,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 R.id.nav_profile -> true
                 R.id.nav_stats, R.id.nav_wallet -> {
-                    Toast.makeText(this, "Coming in Phase 2", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.coming_phase_2), Toast.LENGTH_SHORT).show()
                     false
                 }
                 else -> false

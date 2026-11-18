@@ -78,7 +78,11 @@ class CategoriesActivity : AppCompatActivity() {
             adapter.submitList(categoryList)
 
             val count = categoryList.size
-            tvCategoryCount.text = if (count == 1) "1 Category" else "$count Categories"
+            tvCategoryCount.text = if (count == 1) {
+                getString(R.string.category_count_single)
+            } else {
+                getString(R.string.category_count_plural, count)
+            }
 
             if (categoryList.isEmpty()) {
                 layoutEmptyState.visibility = View.VISIBLE
@@ -98,10 +102,10 @@ class CategoriesActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     try {
                         db.categoryDao().insertCategory(Category(name = name, icon = icon))
-                        Toast.makeText(this@CategoriesActivity, "Category added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CategoriesActivity, getString(R.string.category_added_success), Toast.LENGTH_SHORT).show()
                         loadCategories()
                     } catch (e: Exception) {
-                        Toast.makeText(this@CategoriesActivity, "Failed to add category", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CategoriesActivity, getString(R.string.category_add_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -117,10 +121,10 @@ class CategoriesActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     try {
                         db.categoryDao().updateCategory(category.copy(name = name, icon = icon))
-                        Toast.makeText(this@CategoriesActivity, "Category updated", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CategoriesActivity, getString(R.string.category_updated_success), Toast.LENGTH_SHORT).show()
                         loadCategories()
                     } catch (e: Exception) {
-                        Toast.makeText(this@CategoriesActivity, "Failed to update category", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CategoriesActivity, getString(R.string.category_update_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -130,16 +134,16 @@ class CategoriesActivity : AppCompatActivity() {
     private fun showDeleteConfirmationDialog(category: Category) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.delete_category)
-            .setMessage("Are you sure you want to delete \"${category.name}\"?")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Delete") { _, _ ->
+            .setMessage(getString(R.string.delete_category_confirm, category.name))
+            .setNegativeButton(R.string.cancel_btn, null)
+            .setPositiveButton(R.string.delete_btn) { _, _ ->
                 lifecycleScope.launch {
                     try {
                         db.categoryDao().deleteCategory(category)
-                        Toast.makeText(this@CategoriesActivity, "Category deleted", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CategoriesActivity, getString(R.string.category_deleted_success), Toast.LENGTH_SHORT).show()
                         loadCategories()
                     } catch (e: Exception) {
-                        Toast.makeText(this@CategoriesActivity, "Failed to delete category", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CategoriesActivity, getString(R.string.category_delete_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

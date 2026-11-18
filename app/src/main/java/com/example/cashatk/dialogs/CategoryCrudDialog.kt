@@ -39,11 +39,11 @@ class CategoryCrudDialog(
 
         if (categoryToEdit != null) {
             tvTitle.text = context.getString(R.string.edit_category)
-            tvSubtitle.text = "Update the icon or category name"
+            tvSubtitle.text = context.getString(R.string.edit_category_subtitle)
             etName.setText(categoryToEdit.name)
         } else {
             tvTitle.text = context.getString(R.string.add_category)
-            tvSubtitle.text = "Choose an icon and enter the category name"
+            tvSubtitle.text = context.getString(R.string.add_category_subtitle)
             etName.setText(CategoryIconHelper.getDefaultTitleForIcon(selectedIcon))
         }
 
@@ -79,7 +79,7 @@ class CategoryCrudDialog(
             val name = etName.text?.toString()?.trim() ?: ""
 
             if (name.isEmpty()) {
-                tilName.error = "Category name cannot be empty"
+                tilName.error = context.getString(R.string.error_category_empty)
                 return@setOnClickListener
             }
 
@@ -88,7 +88,7 @@ class CategoryCrudDialog(
             }
 
             if (isDuplicate) {
-                tilName.error = "A category with this name already exists"
+                tilName.error = context.getString(R.string.error_category_duplicate)
                 return@setOnClickListener
             }
 

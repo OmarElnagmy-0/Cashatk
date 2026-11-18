@@ -87,4 +87,26 @@
     <string name="data_privacy_bullet_3_title">Zero Analytics &amp; Tracking</string>
     <string name="data_privacy_bullet_3_desc">We do not track your expenses, habits, or personal information. Your money is your business.</string>
     <string name="data_privacy_footer_note">Your data is stored exclusively on your device. Uninstalling the app will clear local application storage.</string>
+
+    <!-- Feedback, Dialogs & Navigation -->
+    <string name="coming_phase_2">Coming in Phase 2</string>
+    <string name="error_select_category">Please select a category</string>
+    <string name="error_valid_amount">Please enter a valid amount</string>
+    <string name="expense_added_success">Expense added</string>
+    <string name="expense_add_failed">Failed to add expense</string>
+    <string name="category_count_single">1 Category</string>
+    <string name="category_count_plural">%1$d Categories</string>
+    <string name="category_added_success">Category added</string>
+    <string name="category_add_failed">Failed to add category</string>
+    <string name="category_updated_success">Category updated</string>
+    <string name="category_update_failed">Failed to update category</string>
+    <string name="category_deleted_success">Category deleted</string>
+    <string name="category_delete_failed">Failed to delete category</string>
+    <string name="delete_category_confirm">Are you sure you want to delete \"%1$s\"?</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="delete_btn">Delete</string>
+    <string name="edit_category_subtitle">Update the icon or category name</string>
+    <string name="add_category_subtitle">Choose an icon and enter the category name</string>
+    <string name="error_category_empty">Category name cannot be empty</string>
+    <string name="error_category_duplicate">A category with this name already exists</string>
 </resources>

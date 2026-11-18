@@ -49,7 +49,6 @@ class AddExpenseActivity : AppCompatActivity() {
         setupDateSelector()
         setupAddButton()
 
-        // Show today's date by default
         updateDateDisplay()
     }
 
@@ -128,11 +127,11 @@ class AddExpenseActivity : AppCompatActivity() {
             val amount = amountText.toDoubleOrNull()
 
             if (selectedCategory == null) {
-                Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_select_category), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (amount == null || amount <= 0) {
-                Toast.makeText(this, "Please enter a valid amount", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_valid_amount), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -146,10 +145,10 @@ class AddExpenseActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
                     db.transactionDao().insertTransaction(transaction)
-                    Toast.makeText(this@AddExpenseActivity, "Expense added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AddExpenseActivity, getString(R.string.expense_added_success), Toast.LENGTH_SHORT).show()
                     finish()
                 } catch (e: Exception) {
-                    Toast.makeText(this@AddExpenseActivity, "Failed to add expense", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AddExpenseActivity, getString(R.string.expense_add_failed), Toast.LENGTH_SHORT).show()
                 }
             }
         }
