@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Removes the pill-shaped background highlight from BottomNavigationView -->
+    <style name="Widget.Material3.BottomNavigationView.ActiveIndicator" parent="">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+</resources>

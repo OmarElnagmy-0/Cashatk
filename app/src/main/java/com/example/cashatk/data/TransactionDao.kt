@@ -12,6 +12,10 @@ interface TransactionDao {
     @Insert
     suspend fun insertTransaction(transaction: Transaction)
 
+    @androidx.room.Transaction
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
+    suspend fun getAllTransactionsWithCategory(): List<TransactionWithCategory>
+
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     suspend fun getAllTransactions(): List<Transaction>
 

@@ -28,6 +28,9 @@
     <string name="cd_transaction_icon">Transaction Icon</string>
     <string name="cd_add_transaction">Add transaction</string>
 
+    <string name="expense_amount_format">- %1$s</string>
+    <string name="total_expenses_format">$ %1$s</string>
+
     <!-- Add Expense -->
     <string name="add_expense_title">Add Expense</string>
     <string name="category_label">Category</string>
