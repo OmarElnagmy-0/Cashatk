@@ -4,4 +4,8 @@
     <style name="Widget.Material3.BottomNavigationView.ActiveIndicator" parent="">
         <item name="android:color">@android:color/transparent</item>
     </style>
+
+    <style name="ShapeAppearance.Cashatk.ProfileImage" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

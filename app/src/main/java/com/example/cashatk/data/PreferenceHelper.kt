@@ -30,6 +30,18 @@ class PreferenceHelper(context: Context) {
         return "$first $last".trim()
     }
 
+    fun saveProfileImageUri(uri: String) {
+        sharedPref.edit { putString("profile_image_uri", uri) }
+    }
+
+    fun getProfileImageUri(): String? {
+        return sharedPref.getString("profile_image_uri", null)
+    }
+
+    fun clearProfileImageUri() {
+        sharedPref.edit { remove("profile_image_uri") }
+    }
+
     fun setLoggedIn(isLoggedIn: Boolean) {
         sharedPref.edit { putBoolean("is_logged_in", isLoggedIn) }
     }
