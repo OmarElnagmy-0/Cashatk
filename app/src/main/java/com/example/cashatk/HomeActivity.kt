@@ -1,5 +1,6 @@
 package com.example.cashatk
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cashatk.data.AppDatabase
 import com.example.cashatk.data.PreferenceHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
@@ -36,7 +39,30 @@ class HomeActivity : AppCompatActivity() {
 
         setupGreeting()
         setupRecyclerView()
+        setupBottomNavigation()
         loadData()
+    }
+
+    private fun setupBottomNavigation() {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNav.selectedItemId = R.id.nav_home
+
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_home -> true
+                else -> false
+            }
+        }
+
+        val fabAdd = findViewById<FloatingActionButton>(R.id.fab_add)
+        fabAdd.setOnClickListener {
+            startActivity(Intent(this, AddExpenseActivity::class.java))
+        }
     }
 
     private fun setupGreeting() {
